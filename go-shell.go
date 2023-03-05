@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 )
 
@@ -12,7 +13,19 @@ func main() {
 	//fmt.Println("Just another print stmt")
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Print(">")
+		currentDir, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		currentUser, err := user.Current()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		hostname, err := os.Hostname()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+		fmt.Printf("%s@%s-%s>", currentUser.Username, hostname, currentDir)
 		input, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
